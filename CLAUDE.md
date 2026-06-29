@@ -43,9 +43,62 @@ mcp__ai-game-developer__tests-run
 
 Or use the Unity Test Runner window (Window → General → Test Runner) in the Editor for Edit Mode and Play Mode test suites.
 
+## Git & GitHub Workflow
+
+### Branching strategy
+
+- `main` — always stable and shippable; never commit directly
+- `feature/<kebab-name>` — one branch per feature (e.g. `feature/player-movement`, `feature/enemy-spawning`, `feature/weapon-system`)
+- `fix/<kebab-name>` — for bug fixes (e.g. `fix/bullet-collision`)
+
+Always branch from the latest `main`:
+
+```bash
+git checkout main && git pull
+git checkout -b feature/<name>
+```
+
+### Commit message format
+
+Use [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+<type>(<scope>): <short description>
+
+# Types: feat | fix | refactor | chore | docs | perf | test
+# Examples:
+feat(player): add top-down movement with joystick support
+fix(bullets): prevent double-hit on same enemy frame
+chore(packages): add DOTween via Package Manager
+```
+
+Keep the subject line under 72 characters. No period at the end.
+
+### Opening a Pull Request
+
+When a feature branch is ready:
+
+```bash
+git push -u origin feature/<name>
+gh pr create --title "<type>(<scope>): <description>" --body "$(cat <<'EOF'
+## Summary
+- <bullet: what this PR does>
+
+## How to test
+- [ ] Open SampleScene in Unity Editor
+- [ ] Enter Play Mode and verify <behaviour>
+
+## Notes
+<anything reviewers should know — perf tradeoffs, known edge cases, follow-up tickets>
+EOF
+)"
+```
+
+The PR title must follow the same Conventional Commits format as commit messages.
+
 ## Code Conventions
 
-- All game C# scripts go under `Assets/` in logical subdirectories (e.g., `Assets/Scripts/Player/`, `Assets/Scripts/Enemies/`).
+- All game C# scripts go under `Assets/Scripts/` in feature subdirectories (e.g., `Assets/Scripts/Player/`, `Assets/Scripts/Enemies/`, `Assets/Scripts/Weapons/`).
 - Use the new **Input System** (not `Input.GetKey`). The default action asset is `Assets/InputSystem_Actions.inputactions`.
 - URP is the render pipeline — use URP-compatible shaders and `UniversalRenderPipelineAsset`. PC and Mobile renderer assets live in `Assets/Settings/`.
 - `Assets/TutorialInfo/` is boilerplate from the URP starter template; ignore it.
