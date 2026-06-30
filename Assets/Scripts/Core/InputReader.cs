@@ -25,23 +25,21 @@ namespace BulletHeaven.Core
 
         void OnEnable()
         {
-            _actions.Player.Move.performed  += OnMove;
-            _actions.Player.Move.canceled   += OnMove;
             _actions.Player.Pause.performed += OnPause;
             _actions.Player.Enable();
         }
 
         void OnDisable()
         {
-            _actions.Player.Move.performed  -= OnMove;
-            _actions.Player.Move.canceled   -= OnMove;
+            MoveInput = Vector2.zero;
             _actions.Player.Pause.performed -= OnPause;
             _actions.Player.Disable();
         }
 
         void OnDestroy() => _actions?.Dispose();
 
-        private void OnMove(InputAction.CallbackContext ctx)  => MoveInput = ctx.ReadValue<Vector2>();
+        void Update() => MoveInput = _actions.Player.Move.ReadValue<Vector2>();
+
         private void OnPause(InputAction.CallbackContext ctx) => OnPausePressed?.Invoke();
     }
 }
