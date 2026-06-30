@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de25c8f167c744ab6bdbf4c1596f0f52, type: 3}
+  m_Name: WaveConfig_Tier1
+  m_EditorClassIdentifier: Assembly-CSharp::BulletHeaven.Enemies.WaveConfig
+  enemies:
+  - prefab: {fileID: 3644384112913509083, guid: 5935abec352a340bf93839d5f4e29ca8, type: 3}
+    weight: 3
+  - prefab: {fileID: 1211813012298784917, guid: 03fd4cd5b25fb47059ea1fa6f19093f2, type: 3}
+    weight: 2
+  - prefab: {fileID: 7975842687763181473, guid: 1cd23a1a14b5a44c6baec794888580f9, type: 3}
+    weight: 1
+  baseCount: 5
+  countScalePerWave: 1.5
+  spawnInterval: 0.5
+  timeBetweenWaves: 10
+  initialDelay: 2
+  spawnRadius: 14
