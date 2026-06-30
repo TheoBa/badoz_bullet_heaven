@@ -31,7 +31,7 @@ namespace BulletHeaven.Weapons
         {
             if (_playerStats != null && _playerStats.IsDead) return;
             var gm = GameManager.Instance;
-            if (gm != null && gm.CurrentState != GameState.InRun) return;
+            if (gm != null && gm.CurrentState == GameState.GameOver) return;
 
             _timer += Time.deltaTime;
 

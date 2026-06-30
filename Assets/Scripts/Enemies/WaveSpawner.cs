@@ -12,15 +12,17 @@ namespace BulletHeaven.Enemies
         private float _timer;
         private bool  _spawning;
 
-        void Start() => _timer = config != null ? config.initialDelay : 2f;
+        void Start()
+        {
+            _timer = config != null ? config.initialDelay : 2f;
+        }
 
         void Update()
         {
             if (config == null || _spawning) return;
 
-            // Allow free-running when entered directly (no GameManager in scene)
             var gm = GameManager.Instance;
-            if (gm != null && gm.CurrentState != GameState.InRun) return;
+            if (gm != null && gm.CurrentState == GameState.GameOver) return;
 
             _timer -= Time.deltaTime;
             if (_timer <= 0f)

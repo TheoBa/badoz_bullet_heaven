@@ -131,10 +131,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7756764492956034750, guid: 97877760ac531445baf2666b58f83fee, type: 3}
-      propertyPath: enemyLayerMask.m_Bits
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7811360904965230529, guid: 97877760ac531445baf2666b58f83fee, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
