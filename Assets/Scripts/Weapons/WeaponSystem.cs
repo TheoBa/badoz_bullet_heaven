@@ -30,8 +30,8 @@ namespace BulletHeaven.Weapons
         void Update()
         {
             if (_playerStats != null && _playerStats.IsDead) return;
-            if (GameManager.Instance == null) return;
-            if (GameManager.Instance.CurrentState != GameState.InRun) return;
+            var gm = GameManager.Instance;
+            if (gm != null && gm.CurrentState == GameState.GameOver) return;
 
             _timer += Time.deltaTime;
 
