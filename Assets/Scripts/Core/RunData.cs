@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using BulletHeaven.Skills;
 
 namespace BulletHeaven.Core
 {
@@ -13,6 +15,9 @@ namespace BulletHeaven.Core
         public int   EnemiesKilled          { get; private set; }
         public float RunStartTime           { get; private set; }
 
+        private readonly List<SkillBase> _ownedSkills = new();
+        public IReadOnlyList<SkillBase> OwnedSkills => _ownedSkills;
+
         public void StartRun()
         {
             CurrentWave            = 0;
@@ -22,6 +27,7 @@ namespace BulletHeaven.Core
             ResourcesEarnedThisRun = 0;
             EnemiesKilled          = 0;
             RunStartTime           = Time.time;
+            _ownedSkills.Clear();
         }
 
         public void IncrementWave()   => CurrentWave++;
@@ -30,6 +36,7 @@ namespace BulletHeaven.Core
         public void AddXP(float xp)   => CurrentXP += xp;
         public void AddResource(int n) => ResourcesEarnedThisRun += n;
         public void AddKill()          => EnemiesKilled++;
+        public void AddSkill(SkillBase skill) => _ownedSkills.Add(skill);
 
         public float ElapsedTime => Time.time - RunStartTime;
     }

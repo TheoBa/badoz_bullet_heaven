@@ -689,26 +689,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1382796701}
-  - component: {fileID: 1382796700}
+  - component: {fileID: 1382796702}
   m_Layer: 0
-  m_Name: LevelUpUI
+  m_Name: SkillPickUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1382796700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1382796699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96a5f014502c64f79878c49fd76b6790, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BulletHeaven.UI.LevelUpUI
 --- !u!4 &1382796701
 Transform:
   m_ObjectHideFlags: 0
@@ -724,6 +712,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1382796702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382796699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f72d5b639567c4a45b5579214edf1d56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletHeaven.UI.SkillPickUI
+  skillPool: {fileID: 11400000, guid: 120e6771cdef3404d9fb8bb0ff5cc1fb, type: 2}
 --- !u!1 &1573820028
 GameObject:
   m_ObjectHideFlags: 0
