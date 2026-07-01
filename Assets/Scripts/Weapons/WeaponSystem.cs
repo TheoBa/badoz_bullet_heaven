@@ -25,7 +25,12 @@ namespace BulletHeaven.Weapons
         private PlayerStatsRuntime _playerStats;
         private Collider2D[]       _overlapBuffer = new Collider2D[32];
 
-        void Awake() => _playerStats = GetComponent<PlayerStatsRuntime>();
+        void Awake()
+        {
+            _playerStats = GetComponent<PlayerStatsRuntime>();
+            if (enemyLayerMask == 0)
+                enemyLayerMask = 1 << 7; // Enemy layer fallback — inspector value unreliable across prefab ops
+        }
 
         void Update()
         {
