@@ -32,15 +32,17 @@ Full design detail lives in the original planning doc; this file tracks live sta
   - Found + fixed during verification: `LevelUpUI` subscribed to `XPManager.OnLevelUp` in `OnEnable()`, which could run before `XPManager.Awake()` set `Instance` — moved subscription to `Start()`
   - Known follow-up: `TierCompleteUI` uses the same `OnEnable`-subscribe pattern against `TierManager.Instance` and may have the identical latent ordering bug — not yet checked
 
+- [x] 14. 9 in-run skills (3 offensive / 3 defensive / 3 utility) — `feature/skills`
+
 ## In review
 
-- [ ] 14. 9 in-run skills (3 offensive / 3 defensive / 3 utility) — `feature/skills`, [PR #11](https://github.com/TheoBa/badoz_bullet_heaven/pull/11) open, awaiting merge
-  - Runtime-verified all 9 `ApplyToPlayer` effects directly on the player: pierce count, fire rate, lifesteal heal amount, explosion radius, and merged stat percentages (pickup radius/speed/XP gain) all matched expected values; shield absorbed one full hit then went on cooldown while armor reduced the next
-  - Added `IDamageable.TakeDamage` kill-return + `Bullet` `onHit`/`onKill` callbacks to support `ExplosionRing`/`Lifesteal`; added `PlayerStatsRuntime.ArmorFlat`/`ShieldEnabled`/`AddPercentBonus()` for skills that don't fit the existing additive `StatType` bonus system
+- [ ] 15. Skill pick UI (replaces `LevelUpUI`'s placeholder Continue button) — `feature/skill-pick-ui`, PR open, awaiting merge
+  - Runtime-verified: level-up offers 3 random skills from the new `SkillPool` asset, chosen skill applies via `ApplyToPlayer` and is tracked on `RunData.OwnedSkills`, subsequent offers correctly exclude already-owned skills, and multiple queued level-ups keep the pick screen open (`Time.timeScale` stays 0) across consecutive picks
+  - `LevelUpUI` GameObject/script removed; replaced by `SkillPickUI` in the Run scene
+  - Known follow-up (still open, unrelated to this PR): `TierCompleteUI` likely has the same `OnEnable`-subscribe-before-`Awake()` ordering bug `LevelUpUI` had — confirmed identical code pattern this session, not yet fixed
 
 ## Not started
 
-- [ ] 15. Skill pick UI (replaces `LevelUpUI`'s placeholder Continue button) — `feature/skill-pick-ui`
 - [ ] 16. Persistent save system (`SaveData` / `SaveManager`) — `feature/save-system`
 - [ ] 17. Passive tree (hub upgrades, free respec) — `feature/passive-tree`
 - [ ] 18. Hub scene UI (passive tree panel, start run) — `feature/hub-scene`
