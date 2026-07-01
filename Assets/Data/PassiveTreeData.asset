@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95f63b4fd19c0476c88db4ae858050e8, type: 3}
+  m_Name: PassiveTreeData
+  m_EditorClassIdentifier: Assembly-CSharp::BulletHeaven.Meta.PassiveTreeData
+  nodes:
+  - nodeId: MaxHP_1
+    stat: 0
+    tier: 1
+    cost: 10
+    statDelta: 20
+  - nodeId: MaxHP_2
+    stat: 0
+    tier: 2
+    cost: 20
+    statDelta: 30
+  - nodeId: MaxHP_3
+    stat: 0
+    tier: 3
+    cost: 35
+    statDelta: 50
+  - nodeId: Speed_1
+    stat: 1
+    tier: 1
+    cost: 10
+    statDelta: 0.5
+  - nodeId: Speed_2
+    stat: 1
+    tier: 2
+    cost: 20
+    statDelta: 0.75
+  - nodeId: Speed_3
+    stat: 1
+    tier: 3
+    cost: 35
+    statDelta: 1
+  - nodeId: DamageMultiplier_1
+    stat: 2
+    tier: 1
+    cost: 10
+    statDelta: 0.1
+  - nodeId: DamageMultiplier_2
+    stat: 2
+    tier: 2
+    cost: 20
+    statDelta: 0.15
+  - nodeId: DamageMultiplier_3
+    stat: 2
+    tier: 3
+    cost: 35
+    statDelta: 0.25
+  - nodeId: XPGainMultiplier_1
+    stat: 3
+    tier: 1
+    cost: 10
+    statDelta: 0.1
+  - nodeId: XPGainMultiplier_2
+    stat: 3
+    tier: 2
+    cost: 20
+    statDelta: 0.15
+  - nodeId: XPGainMultiplier_3
+    stat: 3
+    tier: 3
+    cost: 35
+    statDelta: 0.2
+  - nodeId: PickupRadius_1
+    stat: 4
+    tier: 1
+    cost: 10
+    statDelta: 0.5
+  - nodeId: PickupRadius_2
+    stat: 4
+    tier: 2
+    cost: 20
+    statDelta: 0.75
+  - nodeId: PickupRadius_3
+    stat: 4
+    tier: 3
+    cost: 35
+    statDelta: 1
