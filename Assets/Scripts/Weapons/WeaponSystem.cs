@@ -18,8 +18,11 @@ namespace BulletHeaven.Weapons
         [SerializeField] private LayerMask enemyLayerMask;
 
         // Run-skill modifiers (set by skills at level-up)
-        public int   ExtraPierces   { get; set; }
-        public float FireRateBonus  { get; set; } // multiplicative, e.g. 0.7 = 30% faster
+        public int   ExtraPierces        { get; set; }
+        public float FireRateBonus       { get; set; } // multiplicative, e.g. 0.7 = 30% faster
+        public float LifestealFraction   { get; set; } // e.g. 0.05 = 5% of damage dealt heals player
+        public float ExplosionRadius     { get; set; } // 0 = disabled
+        public float ExplosionDamageFraction { get; set; } = 0.5f; // fraction of bullet damage dealt as AoE on kill
 
         private float              _timer;
         private PlayerStatsRuntime _playerStats;
@@ -66,7 +69,26 @@ namespace BulletHeaven.Weapons
             go.transform.rotation = Quaternion.identity;
 
             float dmg = baseDamage * (_playerStats != null ? _playerStats.DamageMultiplier : 1f);
-            go.GetComponent<Bullet>().Init(bulletPool, direction, bulletSpeed, dmg, bulletRange, ExtraPierces);
+            go.GetComponent<Bullet>().Init(bulletPool, direction, bulletSpeed, dmg, bulletRange, ExtraPierces,
+                onHit: HandleBulletHit, onKill: HandleBulletKill);
+        }
+
+        private void HandleBulletHit(float damageDealt)
+        {
+            if (LifestealFraction > 0f && _playerStats != null)
+                _playerStats.Heal(damageDealt * LifestealFraction);
+        }
+
+        private void HandleBulletKill(Vector2 position)
+        {
+            if (ExplosionRadius <= 0f) return;
+
+            int count = Physics2D.OverlapCircleNonAlloc(position, ExplosionRadius, _overlapBuffer, enemyLayerMask);
+            float explosionDamage = baseDamage * (_playerStats != null ? _playerStats.DamageMultiplier : 1f)
+                                    * ExplosionDamageFraction;
+
+            for (int i = 0; i < count; i++)
+                _overlapBuffer[i].GetComponent<IDamageable>()?.TakeDamage(explosionDamage);
         }
 
         private Transform FindNearestEnemy()
