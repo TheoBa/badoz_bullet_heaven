@@ -47,7 +47,7 @@ namespace BulletHeaven.Enemies
         private void Collect()
         {
             float gain = _xpValue * (_playerStats != null ? _playerStats.XPGainMultiplier : 1f);
-            GameManager.Instance?.RunData.AddXP(gain);
+            XPManager.Instance?.AddXP(gain);
             _pool?.Release(gameObject);
         }
     }

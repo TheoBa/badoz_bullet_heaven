@@ -7,6 +7,7 @@ namespace BulletHeaven.Core
     {
         public int   CurrentWave            { get; private set; }
         public int   CurrentTier            { get; private set; }
+        public int   CurrentLevel           { get; private set; }
         public float CurrentXP              { get; private set; }
         public int   ResourcesEarnedThisRun { get; private set; }
         public int   EnemiesKilled          { get; private set; }
@@ -16,6 +17,7 @@ namespace BulletHeaven.Core
         {
             CurrentWave            = 0;
             CurrentTier            = 1;
+            CurrentLevel           = 1;
             CurrentXP              = 0f;
             ResourcesEarnedThisRun = 0;
             EnemiesKilled          = 0;
@@ -24,6 +26,7 @@ namespace BulletHeaven.Core
 
         public void IncrementWave()   => CurrentWave++;
         public void IncrementTier()   => CurrentTier++;
+        public void IncrementLevel()  => CurrentLevel++;
         public void AddXP(float xp)   => CurrentXP += xp;
         public void AddResource(int n) => ResourcesEarnedThisRun += n;
         public void AddKill()          => EnemiesKilled++;
