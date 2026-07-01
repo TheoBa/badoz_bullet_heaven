@@ -34,16 +34,19 @@ Full design detail lives in the original planning doc; this file tracks live sta
 
 - [x] 14. 9 in-run skills (3 offensive / 3 defensive / 3 utility) — `feature/skills`
 
+- [x] 15. Skill pick UI (replaces `LevelUpUI`'s placeholder Continue button) — `feature/skill-pick-ui`
+  - `LevelUpUI` GameObject/script removed; replaced by `SkillPickUI` in the Run scene
+  - Known follow-up (still open, unrelated to this feature): `TierCompleteUI` likely has the same `OnEnable`-subscribe-before-`Awake()` ordering bug `LevelUpUI` had — confirmed identical code pattern this session, not yet fixed
+
 ## In review
 
-- [ ] 15. Skill pick UI (replaces `LevelUpUI`'s placeholder Continue button) — `feature/skill-pick-ui`, PR open, awaiting merge
-  - Runtime-verified: level-up offers 3 random skills from the new `SkillPool` asset, chosen skill applies via `ApplyToPlayer` and is tracked on `RunData.OwnedSkills`, subsequent offers correctly exclude already-owned skills, and multiple queued level-ups keep the pick screen open (`Time.timeScale` stays 0) across consecutive picks
-  - `LevelUpUI` GameObject/script removed; replaced by `SkillPickUI` in the Run scene
-  - Known follow-up (still open, unrelated to this PR): `TierCompleteUI` likely has the same `OnEnable`-subscribe-before-`Awake()` ordering bug `LevelUpUI` had — confirmed identical code pattern this session, not yet fixed
+- [ ] 16. Persistent save system (`SaveData` / `SaveManager`) — `feature/save-system`, PR open, awaiting merge
+  - Runtime-verified: fresh install creates default `SaveData`; `GameManager.EndRun` correctly adds the run's earned resources to `SaveData.macroResources` and bumps `unlockedTiers` to the highest tier reached, then writes `persistentDataPath/save.json`; reloading from disk (simulating app restart) confirms the file — not the in-memory copy — is the source of truth
+  - `SaveManager` added to the shared `Managers` prefab (alongside `GameManager`/`SceneLoader`/`InputReader`) so it's present in both `Hub` and `Run` scenes
+  - `passiveTreePoints`/`passiveTreeAllocations` fields are defined but unused until item 17 builds the passive tree
 
 ## Not started
 
-- [ ] 16. Persistent save system (`SaveData` / `SaveManager`) — `feature/save-system`
 - [ ] 17. Passive tree (hub upgrades, free respec) — `feature/passive-tree`
 - [ ] 18. Hub scene UI (passive tree panel, start run) — `feature/hub-scene`
 - [ ] 19. Run → Hub transition / run summary screen — `feature/run-summary`
