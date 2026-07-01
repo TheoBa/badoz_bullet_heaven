@@ -2,6 +2,7 @@ namespace BulletHeaven.Core
 {
     public interface IDamageable
     {
-        void TakeDamage(float amount);
+        // Returns true if this hit reduced the target's HP to 0 or below.
+        bool TakeDamage(float amount);
     }
 }

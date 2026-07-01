@@ -50,11 +50,12 @@ namespace BulletHeaven.Enemies
             Rb.linearVelocity = dir * moveSpeed;
         }
 
-        public virtual void TakeDamage(float amount)
+        public virtual bool TakeDamage(float amount)
         {
-            if (_isDead) return;
+            if (_isDead) return false;
             CurrentHP -= amount;
-            if (CurrentHP <= 0f) Die();
+            if (CurrentHP <= 0f) { Die(); return true; }
+            return false;
         }
 
         protected virtual void Die()

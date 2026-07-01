@@ -27,17 +27,19 @@ Full design detail lives in the original planning doc; this file tracks live sta
 - [x] 10. XP orb + macro resource drop — `feature/wave-spawner` (bundled)
 - [x] 11. Wave spawner — `feature/wave-spawner`
 - [x] 12. Boss wave + tier unlock — `feature/boss-tier`
-
-## In review
-
-- [ ] 13. XP & level-up system — `feature/xp-levelup`, [PR #9](https://github.com/TheoBa/badoz_bullet_heaven/pull/9) open, awaiting merge
+- [x] 13. XP & level-up system — `feature/xp-levelup`
   - Runtime-verified: quadratic XP curve, multi-level-up handling, `Time.timeScale` pause/resume via `LevelUpUI`
   - Found + fixed during verification: `LevelUpUI` subscribed to `XPManager.OnLevelUp` in `OnEnable()`, which could run before `XPManager.Awake()` set `Instance` — moved subscription to `Start()`
   - Known follow-up: `TierCompleteUI` uses the same `OnEnable`-subscribe pattern against `TierManager.Instance` and may have the identical latent ordering bug — not yet checked
 
+## In review
+
+- [ ] 14. 9 in-run skills (3 offensive / 3 defensive / 3 utility) — `feature/skills`, [PR #11](https://github.com/TheoBa/badoz_bullet_heaven/pull/11) open, awaiting merge
+  - Runtime-verified all 9 `ApplyToPlayer` effects directly on the player: pierce count, fire rate, lifesteal heal amount, explosion radius, and merged stat percentages (pickup radius/speed/XP gain) all matched expected values; shield absorbed one full hit then went on cooldown while armor reduced the next
+  - Added `IDamageable.TakeDamage` kill-return + `Bullet` `onHit`/`onKill` callbacks to support `ExplosionRing`/`Lifesteal`; added `PlayerStatsRuntime.ArmorFlat`/`ShieldEnabled`/`AddPercentBonus()` for skills that don't fit the existing additive `StatType` bonus system
+
 ## Not started
 
-- [ ] 14. 9 in-run skills (3 offensive / 3 defensive / 3 utility) — `feature/skills`
 - [ ] 15. Skill pick UI (replaces `LevelUpUI`'s placeholder Continue button) — `feature/skill-pick-ui`
 - [ ] 16. Persistent save system (`SaveData` / `SaveManager`) — `feature/save-system`
 - [ ] 17. Passive tree (hub upgrades, free respec) — `feature/passive-tree`

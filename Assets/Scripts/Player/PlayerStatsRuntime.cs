@@ -20,9 +20,22 @@ namespace BulletHeaven.Player
 
         public bool  IsDead           { get; private set; }
 
+        // Bespoke skill hooks that don't fit the base+hub+run StatType bonus system.
+        public float ArmorFlat     { get; private set; }
+        public bool  ShieldEnabled { get; private set; }
+
+        private const float ShieldCooldownDuration = 8f;
+        private float        _shieldCooldownRemaining;
+
         private readonly Dictionary<StatType, float> _runBonuses = new();
 
         void Start() => Initialize();
+
+        void Update()
+        {
+            if (_shieldCooldownRemaining > 0f)
+                _shieldCooldownRemaining -= Time.deltaTime;
+        }
 
         public void Initialize()
         {
@@ -37,10 +50,41 @@ namespace BulletHeaven.Player
             _runBonuses[stat] = current + value;
         }
 
+        // Convenience for skills expressed as "+N% of base X" (e.g. +50% pickup radius).
+        public void AddPercentBonus(StatType stat, float percent)
+        {
+            float baseValue = stat switch
+            {
+                StatType.MaxHP            => baseStats.maxHP,
+                StatType.Speed            => baseStats.speed,
+                StatType.DamageMultiplier => baseStats.damageMultiplier,
+                StatType.XPGainMultiplier => baseStats.xpGainMultiplier,
+                StatType.PickupRadius     => baseStats.pickupRadius,
+                _                         => 0f
+            };
+            AddRunBonus(stat, baseValue * percent);
+        }
+
+        public void AddArmor(float amount) => ArmorFlat += amount;
+
+        public void EnableShield()
+        {
+            ShieldEnabled            = true;
+            _shieldCooldownRemaining = 0f; // ready immediately on pickup
+        }
+
         public void ApplyDamage(float amount)
         {
             if (IsDead) return;
-            CurrentHP = Mathf.Max(0f, CurrentHP - amount);
+
+            if (ShieldEnabled && _shieldCooldownRemaining <= 0f)
+            {
+                _shieldCooldownRemaining = ShieldCooldownDuration;
+                return; // fully absorbed
+            }
+
+            float mitigated = Mathf.Max(0f, amount - ArmorFlat);
+            CurrentHP = Mathf.Max(0f, CurrentHP - mitigated);
             if (CurrentHP <= 0f) Die();
         }
 
