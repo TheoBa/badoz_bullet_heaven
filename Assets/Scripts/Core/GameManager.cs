@@ -45,6 +45,13 @@ namespace BulletHeaven.Core
         public void EndRun(RunResult result)
         {
             SetState(GameState.GameOver);
+
+            if (SaveManager.Instance != null)
+            {
+                SaveManager.Instance.Data.macroResources += runData.ResourcesEarnedThisRun;
+                SaveManager.Instance.Data.unlockedTiers = Math.Max(SaveManager.Instance.Data.unlockedTiers, runData.CurrentTier);
+                SaveManager.Instance.Save();
+            }
             // Scene transition happens after the end screen is dismissed (handled in UI)
         }
 
