@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BulletHeaven.Core;
+using BulletHeaven.Meta;
 
 namespace BulletHeaven.Player
 {
     public class PlayerStatsRuntime : MonoBehaviour
     {
-        [SerializeField] private PlayerStats baseStats;
+        [SerializeField] private PlayerStats      baseStats;
+        [SerializeField] private PassiveTreeData  passiveTree;
 
         // Current HP
         public float CurrentHP  { get; private set; }
@@ -40,7 +42,17 @@ namespace BulletHeaven.Player
         public void Initialize()
         {
             _runBonuses.Clear();
-            IsDead    = false;
+            IsDead = false;
+
+            if (passiveTree != null && SaveManager.Instance != null)
+            {
+                foreach (StatType stat in System.Enum.GetValues(typeof(StatType)))
+                {
+                    float hubBonus = SaveManager.Instance.GetPassiveBonus(passiveTree, stat);
+                    if (hubBonus != 0f) AddRunBonus(stat, hubBonus);
+                }
+            }
+
             CurrentHP = MaxHP;
         }
 

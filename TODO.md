@@ -38,16 +38,17 @@ Full design detail lives in the original planning doc; this file tracks live sta
   - `LevelUpUI` GameObject/script removed; replaced by `SkillPickUI` in the Run scene
   - Known follow-up (still open, unrelated to this feature): `TierCompleteUI` likely has the same `OnEnable`-subscribe-before-`Awake()` ordering bug `LevelUpUI` had — confirmed identical code pattern this session, not yet fixed
 
+- [x] 16. Persistent save system (`SaveData` / `SaveManager`) — `feature/save-system`
+  - `SaveManager` added to the shared `Managers` prefab (alongside `GameManager`/`SceneLoader`/`InputReader`) so it's present in both `Hub` and `Run` scenes
+
 ## In review
 
-- [ ] 16. Persistent save system (`SaveData` / `SaveManager`) — `feature/save-system`, PR open, awaiting merge
-  - Runtime-verified: fresh install creates default `SaveData`; `GameManager.EndRun` correctly adds the run's earned resources to `SaveData.macroResources` and bumps `unlockedTiers` to the highest tier reached, then writes `persistentDataPath/save.json`; reloading from disk (simulating app restart) confirms the file — not the in-memory copy — is the source of truth
-  - `SaveManager` added to the shared `Managers` prefab (alongside `GameManager`/`SceneLoader`/`InputReader`) so it's present in both `Hub` and `Run` scenes
-  - `passiveTreePoints`/`passiveTreeAllocations` fields are defined but unused until item 17 builds the passive tree
+- [ ] 17. Passive tree (hub upgrades, free respec) — `feature/passive-tree`, PR open, awaiting merge
+  - Runtime-verified: `PurchaseNode` correctly blocks buying a tier-2 node before its tier-1 prerequisite, deducts the right cost, blocks re-buying an owned node, and sums owned nodes' `statDelta` correctly (20+30=50 MaxHP bonus); a fresh `PlayerStatsRuntime.Initialize()` picks up the hub bonus (base 100 -> 150 MaxHP); `ResetPassiveTree` fully refunds spent resources and a subsequent `Initialize()` reverts the player to base stats
+  - `PassiveTreeData` asset holds 15 nodes (5 `StatType` categories x 3 tiers); no Hub scene UI yet to purchase/respec through — that's item 18
 
 ## Not started
 
-- [ ] 17. Passive tree (hub upgrades, free respec) — `feature/passive-tree`
 - [ ] 18. Hub scene UI (passive tree panel, start run) — `feature/hub-scene`
 - [ ] 19. Run → Hub transition / run summary screen — `feature/run-summary`
 - [ ] 20. In-run HUD (HP bar, XP bar, wave/tier badge) — `feature/hud`
