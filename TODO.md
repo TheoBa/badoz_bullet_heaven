@@ -62,13 +62,16 @@ Full design detail lives in the original planning doc; this file tracks live sta
 - [x] 24. Mobile UI adaptation (safe area, touch targets, joystick visibility) — `feature/mobile-ui`
   - **Found and built a real gap**: the on-screen virtual joystick called for by item 2 (`input-system`, marked done) was never actually implemented despite the plan requiring it. Added a `ScreenSpaceOverlay` Canvas + `OnScreenStick` in the `Run` scene, bound to `<Gamepad>/leftStick` (matching the `Move` action's existing gamepad binding, no `.inputactions` changes needed), gated to Android/iOS only via `MobileControlsVisibility`
 
-## In review
-
-- [ ] 25. Android build configuration — `feature/android-build`, PR open, awaiting merge
+- [x] 25. Android build configuration — `feature/android-build`
   - Package name `com.badoz.bulletheavensurvivors` (was still the URP template's placeholder identifier), target SDK 35 (min SDK 26 was already correct), portrait orientation locked (was auto-rotate, all four orientations allowed), IL2CPP scripting backend was already set, added ARMv7 alongside the existing ARM64 architecture, 512x512 placeholder icon assigned across all required Android launcher sizes
 
-## Not started
-- [ ] 26. Performance pass (object pool audit, sprite atlasing, GC) — `feature/performance-pass`
+## In review
+
+- [ ] 26. Performance pass (object pool audit, sprite atlasing, GC) — `feature/performance-pass`, PR open, awaiting merge
+  - Object pool audit: `Bullet`/`XPOrb`/`MacroResourcePickup` already Get()/Release() from a `GameObjectPool` with no `Instantiate`/`Destroy` anywhere — the "bullets + XP orbs use ObjectPool" requirement was already satisfied
+  - **Found and fixed a real GC hot path**: every OnGUI screen allocated fresh `GUIStyle` objects every single frame; `HUDUI`'s is always visible during a run, so this was a continuous per-frame allocation. Styles now cached as fields, created once. Verified via reflection that the same `GUIStyle` instance persists across many frames instead of being reallocated
+  - Also hoisted a `WaitForSeconds` allocation out of `WaveSpawner`'s per-enemy spawn loop (was reallocating one per enemy within a wave)
+  - Sprite atlasing doesn't apply yet — no sprite art exists beyond the placeholder app icon; all rendering is colored primitives and IMGUI
 - [ ] 27. PC + Android builds (smoke test) — `feature/v0-builds`
 
 ## v0 done when

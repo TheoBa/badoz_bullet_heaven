@@ -10,6 +10,9 @@ namespace BulletHeaven.UI
         private bool   _visible;
         private string _message;
 
+        // Cached GUIStyle -- OnGUI runs every frame, so allocating this inline would GC every frame.
+        private GUIStyle _messageStyle;
+
         void Start()
         {
             // Start (not OnEnable) so this runs after every object's Awake() —
@@ -42,16 +45,11 @@ namespace BulletHeaven.UI
             GUI.DrawTexture(screenRect, Texture2D.whiteTexture);
             GUI.color = Color.white;
 
-            var style = new GUIStyle(GUI.skin.label)
-            {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.06f),
-                alignment = TextAnchor.MiddleCenter,
-                wordWrap  = true,
-                normal    = { textColor = Color.white }
-            };
+            _messageStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, wordWrap = true, normal = { textColor = Color.white } };
+            _messageStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.06f);
 
             GUI.Label(new Rect(0, Screen.height * 0.3f, Screen.width, Screen.height * 0.3f),
-                      _message, style);
+                      _message, _messageStyle);
 
             var btnRect = MobileUI.EnsureMinSize(new Rect(Screen.width * 0.35f, Screen.height * 0.62f,
                                    Screen.width * 0.3f,  Screen.height * 0.08f));

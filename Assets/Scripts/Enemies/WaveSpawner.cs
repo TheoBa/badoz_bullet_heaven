@@ -66,10 +66,11 @@ namespace BulletHeaven.Enemies
             else
             {
                 int count = cfg.GetEnemyCount(_wave);
+                var spawnDelay = new WaitForSeconds(cfg.spawnInterval); // reused across the loop, not reallocated per-enemy
                 for (int i = 0; i < count; i++)
                 {
                     SpawnOneEnemy(cfg, tierMgr);
-                    yield return new WaitForSeconds(cfg.spawnInterval);
+                    yield return spawnDelay;
                 }
                 GameManager.Instance?.RunData.IncrementWave();
                 _timer = cfg.timeBetweenWaves;

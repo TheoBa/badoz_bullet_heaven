@@ -9,6 +9,11 @@ namespace BulletHeaven.UI
         private bool  _visible;
         private float _volume = 1f;
 
+        // Cached GUIStyles -- OnGUI runs every frame, so allocating these inline would GC every frame.
+        private GUIStyle _titleStyle;
+        private GUIStyle _labelStyle;
+        private GUIStyle _btnStyle;
+
         void Start()
         {
             if (GameManager.Instance == null) return;
@@ -33,21 +38,17 @@ namespace BulletHeaven.UI
             GUI.DrawTexture(screenRect, Texture2D.whiteTexture);
             GUI.color = Color.white;
 
-            var titleStyle = new GUIStyle(GUI.skin.label)
-            {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.05f),
-                alignment = TextAnchor.MiddleCenter,
-                normal    = { textColor = Color.white }
-            };
-            GUI.Label(new Rect(0, Screen.height * 0.15f, Screen.width, Screen.height * 0.12f), "PAUSED", titleStyle);
+            _titleStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, normal = { textColor = Color.white } };
+            _titleStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.05f);
+            GUI.Label(new Rect(0, Screen.height * 0.15f, Screen.width, Screen.height * 0.12f), "PAUSED", _titleStyle);
 
-            var labelStyle = new GUIStyle(GUI.skin.label)
-            {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.025f),
-                alignment = TextAnchor.MiddleCenter,
-                normal    = { textColor = Color.white }
-            };
-            var btnStyle = new GUIStyle(GUI.skin.button) { fontSize = Mathf.RoundToInt(Screen.height * 0.03f) };
+            _labelStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, normal = { textColor = Color.white } };
+            _labelStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.025f);
+            var labelStyle = _labelStyle;
+
+            _btnStyle ??= new GUIStyle(GUI.skin.button);
+            _btnStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.03f);
+            var btnStyle = _btnStyle;
 
             float btnW = Screen.width * 0.25f;
             float btnH = Screen.height * 0.07f;

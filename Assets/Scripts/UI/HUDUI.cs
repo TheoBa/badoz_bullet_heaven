@@ -14,6 +14,13 @@ namespace BulletHeaven.UI
         private WaveSpawner        _waveSpawner;
         private float              _bossFlashRemaining;
 
+        // Cached GUIStyles -- OnGUI runs every frame, so allocating these inline would GC every frame.
+        private GUIStyle _hpStyle;
+        private GUIStyle _xpStyle;
+        private GUIStyle _badgeStyle;
+        private GUIStyle _resourceStyle;
+        private GUIStyle _bossFlashStyle;
+
         void Start()
         {
             var playerGO = GameObject.FindGameObjectWithTag("Player");
@@ -64,13 +71,9 @@ namespace BulletHeaven.UI
             GUI.DrawTexture(new Rect(bgRect.x, bgRect.y, bgRect.width * pct, bgRect.height), Texture2D.whiteTexture);
             GUI.color = Color.white;
 
-            var style = new GUIStyle(GUI.skin.label)
-            {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.02f),
-                alignment = TextAnchor.MiddleCenter,
-                normal    = { textColor = Color.white }
-            };
-            GUI.Label(bgRect, $"HP {Mathf.CeilToInt(_player.CurrentHP)}/{Mathf.CeilToInt(_player.MaxHP)}", style);
+            _hpStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, normal = { textColor = Color.white } };
+            _hpStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.02f);
+            GUI.Label(bgRect, $"HP {Mathf.CeilToInt(_player.CurrentHP)}/{Mathf.CeilToInt(_player.MaxHP)}", _hpStyle);
         }
 
         private void DrawXPBar()
@@ -91,39 +94,27 @@ namespace BulletHeaven.UI
             GUI.DrawTexture(new Rect(bgRect.x, bgRect.y, bgRect.width * pct, bgRect.height), Texture2D.whiteTexture);
             GUI.color = Color.white;
 
-            var style = new GUIStyle(GUI.skin.label)
-            {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.018f),
-                alignment = TextAnchor.MiddleCenter,
-                normal    = { textColor = Color.white }
-            };
-            GUI.Label(bgRect, $"LV {XPManager.Instance.CurrentLevel}", style);
+            _xpStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, normal = { textColor = Color.white } };
+            _xpStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.018f);
+            GUI.Label(bgRect, $"LV {XPManager.Instance.CurrentLevel}", _xpStyle);
         }
 
         private void DrawWaveTierBadge(GameManager gm)
         {
             int tier = TierManager.Instance != null ? TierManager.Instance.CurrentTierNumber : gm.RunData.CurrentTier;
 
-            var style = new GUIStyle(GUI.skin.label)
-            {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.025f),
-                alignment = TextAnchor.UpperRight,
-                normal    = { textColor = Color.white }
-            };
+            _badgeStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.UpperRight, normal = { textColor = Color.white } };
+            _badgeStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.025f);
             var rect = new Rect(Screen.width - Screen.width * 0.27f - MobileUI.SafeRight, Screen.height * 0.02f + MobileUI.SafeTop, Screen.width * 0.25f, Screen.height * 0.08f);
-            GUI.Label(rect, $"Tier {tier}   Wave {gm.RunData.CurrentWave}", style);
+            GUI.Label(rect, $"Tier {tier}   Wave {gm.RunData.CurrentWave}", _badgeStyle);
         }
 
         private void DrawResourceCounter(GameManager gm)
         {
-            var style = new GUIStyle(GUI.skin.label)
-            {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.022f),
-                alignment = TextAnchor.LowerRight,
-                normal    = { textColor = Color.white }
-            };
+            _resourceStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.LowerRight, normal = { textColor = Color.white } };
+            _resourceStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.022f);
             var rect = new Rect(Screen.width - Screen.width * 0.27f - MobileUI.SafeRight, Screen.height * 0.9f - MobileUI.SafeBottom, Screen.width * 0.25f, Screen.height * 0.05f);
-            GUI.Label(rect, $"Resources: {gm.RunData.ResourcesEarnedThisRun}", style);
+            GUI.Label(rect, $"Resources: {gm.RunData.ResourcesEarnedThisRun}", _resourceStyle);
         }
 
         private void DrawBossFlash()
@@ -133,14 +124,14 @@ namespace BulletHeaven.UI
             GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Texture2D.whiteTexture);
             GUI.color = Color.white;
 
-            var style = new GUIStyle(GUI.skin.label)
+            _bossFlashStyle ??= new GUIStyle(GUI.skin.label)
             {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.08f),
                 alignment = TextAnchor.MiddleCenter,
                 fontStyle = FontStyle.Bold,
                 normal    = { textColor = new Color(1f, 0.2f, 0.2f) }
             };
-            GUI.Label(new Rect(0, Screen.height * 0.4f, Screen.width, Screen.height * 0.2f), "BOSS WAVE", style);
+            _bossFlashStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.08f);
+            GUI.Label(new Rect(0, Screen.height * 0.4f, Screen.width, Screen.height * 0.2f), "BOSS WAVE", _bossFlashStyle);
         }
     }
 }
