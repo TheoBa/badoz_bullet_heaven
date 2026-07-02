@@ -28,10 +28,10 @@ namespace BulletHeaven.UI
             float btnH = Screen.height * 0.08f;
             float btnX = (Screen.width - btnW) * 0.5f;
 
-            if (GUI.Button(new Rect(btnX, Screen.height * 0.55f, btnW, btnH), "Play", btnStyle))
+            if (GUI.Button(MobileUI.EnsureMinSize(new Rect(btnX, Screen.height * 0.55f, btnW, btnH)), "Play", btnStyle))
                 GameManager.Instance?.ReturnToHub();
 
-            if (GUI.Button(new Rect(btnX, Screen.height * 0.68f, btnW, btnH), "Quit", btnStyle))
+            if (GUI.Button(MobileUI.EnsureMinSize(new Rect(btnX, Screen.height * 0.68f, btnW, btnH)), "Quit", btnStyle))
             {
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;

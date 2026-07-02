@@ -53,10 +53,10 @@ namespace BulletHeaven.UI
             float btnH = Screen.height * 0.07f;
             float btnX = (Screen.width - btnW) * 0.5f;
 
-            if (GUI.Button(new Rect(btnX, Screen.height * 0.35f, btnW, btnH), "Resume", btnStyle))
+            if (GUI.Button(MobileUI.EnsureMinSize(new Rect(btnX, Screen.height * 0.35f, btnW, btnH)), "Resume", btnStyle))
                 GameManager.Instance?.ResumeGame();
 
-            if (GUI.Button(new Rect(btnX, Screen.height * 0.45f, btnW, btnH), "Abandon Run", btnStyle))
+            if (GUI.Button(MobileUI.EnsureMinSize(new Rect(btnX, Screen.height * 0.45f, btnW, btnH)), "Abandon Run", btnStyle))
             {
                 // No EndRun() call -> this run's earned resources are forfeited, per design.
                 Time.timeScale = 1f;

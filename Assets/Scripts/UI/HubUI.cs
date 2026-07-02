@@ -90,14 +90,14 @@ namespace BulletHeaven.UI
                         : $"T{tier}\n+{node.statDelta}\ncost {node.cost}";
 
                     GUI.enabled = !owned && canBuy;
-                    if (GUI.Button(new Rect(btnX, btnY, btnW, btnH), label, btnStyle))
+                    if (GUI.Button(MobileUI.EnsureMinSize(new Rect(btnX, btnY, btnW, btnH)), label, btnStyle))
                         save.PurchaseNode(passiveTree, node.nodeId);
                     GUI.enabled = true;
                 }
             }
 
             var resetStyle = new GUIStyle(GUI.skin.button) { fontSize = Mathf.RoundToInt(Screen.height * 0.022f) };
-            var resetRect  = new Rect(panelX + 10, panelY + panelH - Screen.height * 0.06f, panelW * 0.28f, Screen.height * 0.05f);
+            var resetRect  = MobileUI.EnsureMinSize(new Rect(panelX + 10, panelY + panelH - Screen.height * 0.06f, panelW * 0.28f, Screen.height * 0.05f));
             if (GUI.Button(resetRect, "Reset Tree (Free Respec)", resetStyle))
                 save.ResetPassiveTree(passiveTree);
         }
@@ -127,7 +127,7 @@ namespace BulletHeaven.UI
                       $"Tiers Unlocked: {save.Data.unlockedTiers}", labelStyle);
 
             var startBtnStyle = new GUIStyle(GUI.skin.button) { fontSize = Mathf.RoundToInt(Screen.height * 0.035f) };
-            var startRect = new Rect(panelX + panelW * 0.1f, panelY + panelH * 0.75f, panelW * 0.8f, panelH * 0.15f);
+            var startRect = MobileUI.EnsureMinSize(new Rect(panelX + panelW * 0.1f, panelY + panelH * 0.75f, panelW * 0.8f, panelH * 0.15f));
             if (GUI.Button(startRect, "Start Run", startBtnStyle))
                 GameManager.Instance?.StartRun();
         }
