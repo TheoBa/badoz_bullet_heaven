@@ -51,16 +51,18 @@ Full design detail lives in the original planning doc; this file tracks live sta
   - Closed a real gap: death previously had no screen and no way back to the Hub at all — the run just silently froze
   - `TierCompleteUI`'s `OnEnable`-subscribe-before-`Awake()` ordering bug fixed (same class as `LevelUpUI`'s, flagged as an open follow-up in three prior PRs)
 
-## In review
-
-- [ ] 20. In-run HUD (HP bar, XP bar, wave/tier badge) — `feature/hud`, PR open, awaiting merge
-  - Runtime-verified via screenshots + script-execute: HP bar, XP bar, tier/wave badge, and resource counter all render at the correct positions and match live game state exactly (confirmed by cross-checking rendered pixels against direct queries of `PlayerStatsRuntime`/`XPManager`/`RunData`); boss-wave flash + "BOSS WAVE" text confirmed via a forced-duration test (`WaveSpawner.OnBossWaveStarted` has exactly 1 subscriber, `HUDUI`)
+- [x] 20. In-run HUD (HP bar, XP bar, wave/tier badge) — `feature/hud`
   - HUD hides only during `GameState.GameOver` (where `RunSummaryUI` takes over); visible otherwise
 
+- [x] 23. Game over & win screens — delivered by `RunSummaryUI` in `feature/run-summary` (item 19); no separate work needed
+
+## In review
+
+- [ ] 21. Main menu — `feature/menus`, PR open, awaiting merge
+- [ ] 22. Pause menu — `feature/menus`, PR open, awaiting merge
+  - Runtime-verified via screenshots + script-execute: `MainMenu` (now build index 0, the entry point) renders Title/Play/Quit, Play correctly transitions `GameState` to `Hub` and loads the `Hub` scene; in `Run`, Pause correctly shows Resume/Abandon Run/Volume, Resume returns to `InRun` with `timeScale` restored, and Abandon Run confirmed to leave `SaveManager.Data.macroResources` unchanged (i.e. the run's earned-but-unbanked resources are correctly forfeited) while still resetting `timeScale` and returning to `Hub`
+
 ## Not started
-- [ ] 21. Main menu — `feature/menus`
-- [ ] 22. Pause menu — `feature/menus`
-- [ ] 23. Game over & win screens — `feature/menus` (or `feature/run-summary`)
 - [ ] 24. Mobile UI adaptation (safe area, touch targets, joystick visibility) — `feature/mobile-ui`
 - [ ] 25. Android build configuration — `feature/android-build`
 - [ ] 26. Performance pass (object pool audit, sprite atlasing, GC) — `feature/performance-pass`
