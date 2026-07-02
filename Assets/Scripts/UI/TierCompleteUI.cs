@@ -53,8 +53,8 @@ namespace BulletHeaven.UI
             GUI.Label(new Rect(0, Screen.height * 0.3f, Screen.width, Screen.height * 0.3f),
                       _message, style);
 
-            var btnRect = new Rect(Screen.width * 0.35f, Screen.height * 0.62f,
-                                   Screen.width * 0.3f,  Screen.height * 0.08f);
+            var btnRect = MobileUI.EnsureMinSize(new Rect(Screen.width * 0.35f, Screen.height * 0.62f,
+                                   Screen.width * 0.3f,  Screen.height * 0.08f));
 
             if (GUI.Button(btnRect, "Continue"))
             {

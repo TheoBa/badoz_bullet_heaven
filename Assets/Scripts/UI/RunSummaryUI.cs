@@ -71,7 +71,7 @@ namespace BulletHeaven.UI
             GUI.Label(new Rect(0, Screen.height * 0.35f, Screen.width, Screen.height * 0.3f), stats, statStyle);
 
             var btnStyle = new GUIStyle(GUI.skin.button) { fontSize = Mathf.RoundToInt(Screen.height * 0.035f) };
-            var btnRect  = new Rect(Screen.width * 0.35f, Screen.height * 0.7f, Screen.width * 0.3f, Screen.height * 0.08f);
+            var btnRect  = MobileUI.EnsureMinSize(new Rect(Screen.width * 0.35f, Screen.height * 0.7f, Screen.width * 0.3f, Screen.height * 0.08f));
             if (GUI.Button(btnRect, "Return to Hub"))
             {
                 _visible       = false;

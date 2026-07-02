@@ -54,7 +54,7 @@ namespace BulletHeaven.UI
 
             float barW = Screen.width * 0.25f;
             float barH = Screen.height * 0.04f;
-            var   bgRect = new Rect(Screen.width * 0.02f, Screen.height * 0.02f, barW, barH);
+            var   bgRect = new Rect(Screen.width * 0.02f + MobileUI.SafeLeft, Screen.height * 0.02f + MobileUI.SafeTop, barW, barH);
 
             float pct = _player.MaxHP > 0f ? Mathf.Clamp01(_player.CurrentHP / _player.MaxHP) : 0f;
 
@@ -79,7 +79,7 @@ namespace BulletHeaven.UI
 
             float barW = Screen.width * 0.6f;
             float barH = Screen.height * 0.03f;
-            var   bgRect = new Rect((Screen.width - barW) * 0.5f, Screen.height * 0.95f, barW, barH);
+            var   bgRect = new Rect((Screen.width - barW) * 0.5f, Screen.height * 0.95f - MobileUI.SafeBottom, barW, barH);
 
             float pct = XPManager.Instance.XPToNextLevel > 0f
                 ? Mathf.Clamp01(XPManager.Instance.XPIntoLevel / XPManager.Instance.XPToNextLevel)
@@ -110,7 +110,7 @@ namespace BulletHeaven.UI
                 alignment = TextAnchor.UpperRight,
                 normal    = { textColor = Color.white }
             };
-            var rect = new Rect(Screen.width - Screen.width * 0.27f, Screen.height * 0.02f, Screen.width * 0.25f, Screen.height * 0.08f);
+            var rect = new Rect(Screen.width - Screen.width * 0.27f - MobileUI.SafeRight, Screen.height * 0.02f + MobileUI.SafeTop, Screen.width * 0.25f, Screen.height * 0.08f);
             GUI.Label(rect, $"Tier {tier}   Wave {gm.RunData.CurrentWave}", style);
         }
 
@@ -122,7 +122,7 @@ namespace BulletHeaven.UI
                 alignment = TextAnchor.LowerRight,
                 normal    = { textColor = Color.white }
             };
-            var rect = new Rect(Screen.width - Screen.width * 0.27f, Screen.height * 0.9f, Screen.width * 0.25f, Screen.height * 0.05f);
+            var rect = new Rect(Screen.width - Screen.width * 0.27f - MobileUI.SafeRight, Screen.height * 0.9f - MobileUI.SafeBottom, Screen.width * 0.25f, Screen.height * 0.05f);
             GUI.Label(rect, $"Resources: {gm.RunData.ResourcesEarnedThisRun}", style);
         }
 

@@ -143,8 +143,8 @@ namespace BulletHeaven.UI
                 GUI.Label(new Rect(cardRect.x + 10, cardRect.y + cardHeight * 0.42f, cardRect.width - 20, cardHeight * 0.4f),
                           skill.description, descStyle);
 
-                var btnRect = new Rect(cardRect.x + cardWidth * 0.15f, cardRect.y + cardHeight * 0.85f,
-                                       cardWidth * 0.7f, cardHeight * 0.1f);
+                var btnRect = MobileUI.EnsureMinSize(new Rect(cardRect.x + cardWidth * 0.15f, cardRect.y + cardHeight * 0.85f,
+                                       cardWidth * 0.7f, cardHeight * 0.1f));
                 if (GUI.Button(btnRect, "Choose"))
                     Pick(skill);
             }
