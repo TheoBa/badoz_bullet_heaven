@@ -9,8 +9,9 @@ namespace BulletHeaven.Core
 
         [SerializeField] private RunData runData;
 
-        public GameState  CurrentState { get; private set; }
-        public RunData    RunData      => runData;
+        public GameState  CurrentState   { get; private set; }
+        public RunData    RunData        => runData;
+        public RunResult  LastRunResult  { get; private set; }
 
         public event Action<GameState> OnStateChanged;
 
@@ -44,6 +45,7 @@ namespace BulletHeaven.Core
         // Called by player death, tier complete, or full clear
         public void EndRun(RunResult result)
         {
+            LastRunResult = result;
             SetState(GameState.GameOver);
 
             if (SaveManager.Instance != null)

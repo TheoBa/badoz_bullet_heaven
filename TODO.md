@@ -44,15 +44,18 @@ Full design detail lives in the original planning doc; this file tracks live sta
 - [x] 17. Passive tree (hub upgrades, free respec) — `feature/passive-tree`
   - `PassiveTreeData` asset holds 15 nodes (5 `StatType` categories x 3 tiers)
 
+- [x] 18. Hub scene UI (passive tree panel, start run) — `feature/hub-scene`
+  - **Found and fixed a real, previously-silent bug**: `Hub.unity` and `Run.unity` were never registered in Build Settings, so `SceneLoader.LoadScene` (Start Run, tier transitions, return-to-hub) failed at runtime — the run flow was silently broken since the scenes were first created. Fixed by registering both in Build Settings.
+
 ## In review
 
-- [ ] 18. Hub scene UI (passive tree panel, start run) — `feature/hub-scene`, PR open, awaiting merge
-  - Runtime-verified via screenshots + script-execute: passive tree grid renders all 15 nodes with correct locked/purchasable/owned visual states, purchasing a node live-updates the resource count and unlocks its tier-2 sibling, Start Run correctly transitions `GameManager.CurrentState` to `InRun`
-  - **Found and fixed a real, previously-silent bug**: `Hub.unity` and `Run.unity` were never registered in Build Settings (`EditorBuildSettings.scenes` only had `SampleScene`), so `SceneLoader.LoadScene` — used by Start Run, tier transitions, and return-to-hub — failed at runtime with "Scene couldn't be loaded because it has not been added to the active build profile." This means the run flow was silently broken before this PR, on every branch, since scenes were first created. Fixed by registering `Hub.unity` and `Run.unity` in Build Settings.
+- [ ] 19. Run → Hub transition / run summary screen — `feature/run-summary`, PR open, awaiting merge
+  - Runtime-verified via screenshot + script-execute: simulated a death mid-run, confirmed `RunSummaryUI` shows "RUN OVER" with correct resources/kills/waves/time stats and pauses time; "Return to Hub" transitions `GameState` to `Hub` and hides the screen; confirmed the mid-run `TierCompleteUI` popup (now fixed to subscribe in `Start()`) still fires correctly and doesn't interfere
+  - **Closes a real gap**: death previously had no screen and no way back to the Hub at all — `PlayerStatsRuntime.Die()` called `EndRun` but nothing displayed anything or transitioned scenes, so the game just silently froze
+  - `TierCompleteUI`'s `OnRunCleared`/victory handling removed (superseded by `RunSummaryUI`, which now covers both death and full-clear via `GameManager.LastRunResult`); its own `OnEnable`-subscribe-before-`Awake()` ordering bug (same class as `LevelUpUI`'s, flagged as an open follow-up in three prior PRs) is fixed alongside this change
 
 ## Not started
 
-- [ ] 19. Run → Hub transition / run summary screen — `feature/run-summary`
 - [ ] 20. In-run HUD (HP bar, XP bar, wave/tier badge) — `feature/hud`
 - [ ] 21. Main menu — `feature/menus`
 - [ ] 22. Pause menu — `feature/menus`
