@@ -18,6 +18,11 @@ namespace BulletHeaven.UI
         private List<SkillBase>     _offered = new();
         private PlayerStatsRuntime  _playerStats;
 
+        // Cached GUIStyles -- OnGUI runs every frame, so allocating these inline would GC every frame.
+        private GUIStyle _titleStyle;
+        private GUIStyle _nameStyle;
+        private GUIStyle _descStyle;
+
         void Start()
         {
             // Start (not OnEnable) so this runs after every object's Awake() —
@@ -90,16 +95,11 @@ namespace BulletHeaven.UI
             GUI.DrawTexture(screenRect, Texture2D.whiteTexture);
             GUI.color = Color.white;
 
-            var titleStyle = new GUIStyle(GUI.skin.label)
-            {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.05f),
-                alignment = TextAnchor.MiddleCenter,
-                wordWrap  = true,
-                normal    = { textColor = Color.white }
-            };
+            _titleStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, wordWrap = true, normal = { textColor = Color.white } };
+            _titleStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.05f);
 
             GUI.Label(new Rect(0, Screen.height * 0.1f, Screen.width, Screen.height * 0.15f),
-                      $"LEVEL {_displayLevel}! Choose a skill", titleStyle);
+                      $"LEVEL {_displayLevel}! Choose a skill", _titleStyle);
 
             if (_offered.Count == 0) return;
 
@@ -110,22 +110,13 @@ namespace BulletHeaven.UI
             float startX     = (Screen.width - totalWidth) * 0.5f;
             float cardY       = Screen.height * 0.3f;
 
-            var nameStyle = new GUIStyle(GUI.skin.label)
-            {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.035f),
-                alignment = TextAnchor.UpperCenter,
-                wordWrap  = true,
-                fontStyle = FontStyle.Bold,
-                normal    = { textColor = Color.white }
-            };
+            _nameStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.UpperCenter, wordWrap = true, fontStyle = FontStyle.Bold, normal = { textColor = Color.white } };
+            _nameStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.035f);
+            var nameStyle = _nameStyle;
 
-            var descStyle = new GUIStyle(GUI.skin.label)
-            {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.022f),
-                alignment = TextAnchor.UpperCenter,
-                wordWrap  = true,
-                normal    = { textColor = Color.white }
-            };
+            _descStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.UpperCenter, wordWrap = true, normal = { textColor = Color.white } };
+            _descStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.022f);
+            var descStyle = _descStyle;
 
             for (int i = 0; i < _offered.Count; i++)
             {

@@ -6,6 +6,10 @@ namespace BulletHeaven.UI
     // First screen loaded at startup.
     public class MainMenuUI : MonoBehaviour
     {
+        // Cached GUIStyles -- OnGUI runs every frame, so allocating these inline would GC every frame.
+        private GUIStyle _titleStyle;
+        private GUIStyle _btnStyle;
+
         void OnGUI()
         {
             var screenRect = new Rect(0, 0, Screen.width, Screen.height);
@@ -13,17 +17,19 @@ namespace BulletHeaven.UI
             GUI.DrawTexture(screenRect, Texture2D.whiteTexture);
             GUI.color = Color.white;
 
-            var titleStyle = new GUIStyle(GUI.skin.label)
+            _titleStyle ??= new GUIStyle(GUI.skin.label)
             {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.08f),
                 alignment = TextAnchor.MiddleCenter,
                 fontStyle = FontStyle.Bold,
                 normal    = { textColor = Color.white }
             };
+            _titleStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.08f);
             GUI.Label(new Rect(0, Screen.height * 0.25f, Screen.width, Screen.height * 0.2f),
-                      "BADOZ BULLET HEAVEN", titleStyle);
+                      "BADOZ BULLET HEAVEN", _titleStyle);
 
-            var btnStyle = new GUIStyle(GUI.skin.button) { fontSize = Mathf.RoundToInt(Screen.height * 0.04f) };
+            _btnStyle ??= new GUIStyle(GUI.skin.button);
+            _btnStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.04f);
+            var btnStyle = _btnStyle;
             float btnW = Screen.width * 0.25f;
             float btnH = Screen.height * 0.08f;
             float btnX = (Screen.width - btnW) * 0.5f;

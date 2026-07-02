@@ -9,6 +9,11 @@ namespace BulletHeaven.UI
     {
         private bool _visible;
 
+        // Cached GUIStyles -- OnGUI runs every frame, so allocating these inline would GC every frame.
+        private GUIStyle _titleStyle;
+        private GUIStyle _statStyle;
+        private GUIStyle _btnStyle;
+
         void Start()
         {
             if (GameManager.Instance == null) return;
@@ -43,22 +48,14 @@ namespace BulletHeaven.UI
             GUI.DrawTexture(screenRect, Texture2D.whiteTexture);
             GUI.color = Color.white;
 
-            var titleStyle = new GUIStyle(GUI.skin.label)
-            {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.06f),
-                alignment = TextAnchor.MiddleCenter,
-                normal    = { textColor = Color.white }
-            };
+            _titleStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, normal = { textColor = Color.white } };
+            _titleStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.06f);
             string title = gm.LastRunResult == RunResult.FullClear ? "VICTORY!" : "RUN OVER";
-            GUI.Label(new Rect(0, Screen.height * 0.15f, Screen.width, Screen.height * 0.15f), title, titleStyle);
+            GUI.Label(new Rect(0, Screen.height * 0.15f, Screen.width, Screen.height * 0.15f), title, _titleStyle);
 
-            var statStyle = new GUIStyle(GUI.skin.label)
-            {
-                fontSize  = Mathf.RoundToInt(Screen.height * 0.035f),
-                alignment = TextAnchor.MiddleCenter,
-                wordWrap  = true,
-                normal    = { textColor = Color.white }
-            };
+            _statStyle ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, wordWrap = true, normal = { textColor = Color.white } };
+            _statStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.035f);
+            var statStyle = _statStyle;
 
             int minutes = Mathf.FloorToInt(runData.ElapsedTime / 60f);
             int seconds = Mathf.FloorToInt(runData.ElapsedTime % 60f);
@@ -70,9 +67,10 @@ namespace BulletHeaven.UI
 
             GUI.Label(new Rect(0, Screen.height * 0.35f, Screen.width, Screen.height * 0.3f), stats, statStyle);
 
-            var btnStyle = new GUIStyle(GUI.skin.button) { fontSize = Mathf.RoundToInt(Screen.height * 0.035f) };
+            _btnStyle ??= new GUIStyle(GUI.skin.button);
+            _btnStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.035f);
             var btnRect  = MobileUI.EnsureMinSize(new Rect(Screen.width * 0.35f, Screen.height * 0.7f, Screen.width * 0.3f, Screen.height * 0.08f));
-            if (GUI.Button(btnRect, "Return to Hub"))
+            if (GUI.Button(btnRect, "Return to Hub", _btnStyle))
             {
                 _visible       = false;
                 Time.timeScale = 1f;
