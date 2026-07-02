@@ -9,6 +9,8 @@ namespace BulletHeaven.Enemies
         [Tooltip("Fallback config used when TierManager is not present (solo testing)")]
         [SerializeField] private WaveConfig fallbackConfig;
 
+        public event System.Action OnBossWaveStarted;
+
         private int   _wave;        // total waves across all tiers
         private int   _waveInTier;  // waves completed within the current tier
         private float _timer;
@@ -59,6 +61,7 @@ namespace BulletHeaven.Enemies
             {
                 SpawnBoss(tierMgr);
                 _waitingForBoss = true;
+                OnBossWaveStarted?.Invoke();
             }
             else
             {

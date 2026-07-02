@@ -47,16 +47,17 @@ Full design detail lives in the original planning doc; this file tracks live sta
 - [x] 18. Hub scene UI (passive tree panel, start run) — `feature/hub-scene`
   - **Found and fixed a real, previously-silent bug**: `Hub.unity` and `Run.unity` were never registered in Build Settings, so `SceneLoader.LoadScene` (Start Run, tier transitions, return-to-hub) failed at runtime — the run flow was silently broken since the scenes were first created. Fixed by registering both in Build Settings.
 
+- [x] 19. Run → Hub transition / run summary screen — `feature/run-summary`
+  - Closed a real gap: death previously had no screen and no way back to the Hub at all — the run just silently froze
+  - `TierCompleteUI`'s `OnEnable`-subscribe-before-`Awake()` ordering bug fixed (same class as `LevelUpUI`'s, flagged as an open follow-up in three prior PRs)
+
 ## In review
 
-- [ ] 19. Run → Hub transition / run summary screen — `feature/run-summary`, PR open, awaiting merge
-  - Runtime-verified via screenshot + script-execute: simulated a death mid-run, confirmed `RunSummaryUI` shows "RUN OVER" with correct resources/kills/waves/time stats and pauses time; "Return to Hub" transitions `GameState` to `Hub` and hides the screen; confirmed the mid-run `TierCompleteUI` popup (now fixed to subscribe in `Start()`) still fires correctly and doesn't interfere
-  - **Closes a real gap**: death previously had no screen and no way back to the Hub at all — `PlayerStatsRuntime.Die()` called `EndRun` but nothing displayed anything or transitioned scenes, so the game just silently froze
-  - `TierCompleteUI`'s `OnRunCleared`/victory handling removed (superseded by `RunSummaryUI`, which now covers both death and full-clear via `GameManager.LastRunResult`); its own `OnEnable`-subscribe-before-`Awake()` ordering bug (same class as `LevelUpUI`'s, flagged as an open follow-up in three prior PRs) is fixed alongside this change
+- [ ] 20. In-run HUD (HP bar, XP bar, wave/tier badge) — `feature/hud`, PR open, awaiting merge
+  - Runtime-verified via screenshots + script-execute: HP bar, XP bar, tier/wave badge, and resource counter all render at the correct positions and match live game state exactly (confirmed by cross-checking rendered pixels against direct queries of `PlayerStatsRuntime`/`XPManager`/`RunData`); boss-wave flash + "BOSS WAVE" text confirmed via a forced-duration test (`WaveSpawner.OnBossWaveStarted` has exactly 1 subscriber, `HUDUI`)
+  - HUD hides only during `GameState.GameOver` (where `RunSummaryUI` takes over); visible otherwise
 
 ## Not started
-
-- [ ] 20. In-run HUD (HP bar, XP bar, wave/tier badge) — `feature/hud`
 - [ ] 21. Main menu — `feature/menus`
 - [ ] 22. Pause menu — `feature/menus`
 - [ ] 23. Game over & win screens — `feature/menus` (or `feature/run-summary`)
