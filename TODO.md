@@ -56,14 +56,17 @@ Full design detail lives in the original planning doc; this file tracks live sta
 
 - [x] 23. Game over & win screens — delivered by `RunSummaryUI` in `feature/run-summary` (item 19); no separate work needed
 
+- [x] 21. Main menu — `feature/menus`
+- [x] 22. Pause menu — `feature/menus`
+
 ## In review
 
-- [ ] 21. Main menu — `feature/menus`, PR open, awaiting merge
-- [ ] 22. Pause menu — `feature/menus`, PR open, awaiting merge
-  - Runtime-verified via screenshots + script-execute: `MainMenu` (now build index 0, the entry point) renders Title/Play/Quit, Play correctly transitions `GameState` to `Hub` and loads the `Hub` scene; in `Run`, Pause correctly shows Resume/Abandon Run/Volume, Resume returns to `InRun` with `timeScale` restored, and Abandon Run confirmed to leave `SaveManager.Data.macroResources` unchanged (i.e. the run's earned-but-unbanked resources are correctly forfeited) while still resetting `timeScale` and returning to `Hub`
+- [ ] 24. Mobile UI adaptation (safe area, touch targets, joystick visibility) — `feature/mobile-ui`, PR open, awaiting merge
+  - `MobileUI` helper (`EnsureMinSize` for 48dp touch targets, `SafeTop/Bottom/Left/Right` for notch/home-indicator insets) applied across every OnGUI screen — this project uses IMGUI throughout, not uGUI, so there's no single root Canvas to apply these to project-wide
+  - **Found and built a real gap**: the on-screen virtual joystick called for by item 2 (`input-system`, marked done) was never actually implemented despite the plan requiring it. Added a `ScreenSpaceOverlay` Canvas + `OnScreenStick` in the `Run` scene, bound to `<Gamepad>/leftStick` (matching the `Move` action's existing gamepad binding, no `.inputactions` changes needed), gated to Android/iOS only via `MobileControlsVisibility`
+  - Runtime-verified via a simulated drag that `OnScreenStick` correctly writes to a virtual `Gamepad`'s `leftStick` control on both axes and resets to zero on release — confirmed structurally correct up to the exact point the `Move` action reads it; confirmed the joystick canvas is inactive by default in the desktop editor
 
 ## Not started
-- [ ] 24. Mobile UI adaptation (safe area, touch targets, joystick visibility) — `feature/mobile-ui`
 - [ ] 25. Android build configuration — `feature/android-build`
 - [ ] 26. Performance pass (object pool audit, sprite atlasing, GC) — `feature/performance-pass`
 - [ ] 27. PC + Android builds (smoke test) — `feature/v0-builds`
