@@ -41,15 +41,17 @@ Full design detail lives in the original planning doc; this file tracks live sta
 - [x] 16. Persistent save system (`SaveData` / `SaveManager`) — `feature/save-system`
   - `SaveManager` added to the shared `Managers` prefab (alongside `GameManager`/`SceneLoader`/`InputReader`) so it's present in both `Hub` and `Run` scenes
 
+- [x] 17. Passive tree (hub upgrades, free respec) — `feature/passive-tree`
+  - `PassiveTreeData` asset holds 15 nodes (5 `StatType` categories x 3 tiers)
+
 ## In review
 
-- [ ] 17. Passive tree (hub upgrades, free respec) — `feature/passive-tree`, PR open, awaiting merge
-  - Runtime-verified: `PurchaseNode` correctly blocks buying a tier-2 node before its tier-1 prerequisite, deducts the right cost, blocks re-buying an owned node, and sums owned nodes' `statDelta` correctly (20+30=50 MaxHP bonus); a fresh `PlayerStatsRuntime.Initialize()` picks up the hub bonus (base 100 -> 150 MaxHP); `ResetPassiveTree` fully refunds spent resources and a subsequent `Initialize()` reverts the player to base stats
-  - `PassiveTreeData` asset holds 15 nodes (5 `StatType` categories x 3 tiers); no Hub scene UI yet to purchase/respec through — that's item 18
+- [ ] 18. Hub scene UI (passive tree panel, start run) — `feature/hub-scene`, PR open, awaiting merge
+  - Runtime-verified via screenshots + script-execute: passive tree grid renders all 15 nodes with correct locked/purchasable/owned visual states, purchasing a node live-updates the resource count and unlocks its tier-2 sibling, Start Run correctly transitions `GameManager.CurrentState` to `InRun`
+  - **Found and fixed a real, previously-silent bug**: `Hub.unity` and `Run.unity` were never registered in Build Settings (`EditorBuildSettings.scenes` only had `SampleScene`), so `SceneLoader.LoadScene` — used by Start Run, tier transitions, and return-to-hub — failed at runtime with "Scene couldn't be loaded because it has not been added to the active build profile." This means the run flow was silently broken before this PR, on every branch, since scenes were first created. Fixed by registering `Hub.unity` and `Run.unity` in Build Settings.
 
 ## Not started
 
-- [ ] 18. Hub scene UI (passive tree panel, start run) — `feature/hub-scene`
 - [ ] 19. Run → Hub transition / run summary screen — `feature/run-summary`
 - [ ] 20. In-run HUD (HP bar, XP bar, wave/tier badge) — `feature/hud`
 - [ ] 21. Main menu — `feature/menus`
