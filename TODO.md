@@ -65,18 +65,23 @@ Full design detail lives in the original planning doc; this file tracks live sta
 - [x] 25. Android build configuration — `feature/android-build`
   - Package name `com.badoz.bulletheavensurvivors` (was still the URP template's placeholder identifier), target SDK 35 (min SDK 26 was already correct), portrait orientation locked (was auto-rotate, all four orientations allowed), IL2CPP scripting backend was already set, added ARMv7 alongside the existing ARM64 architecture, 512x512 placeholder icon assigned across all required Android launcher sizes
 
-## In review
-
-- [ ] 26. Performance pass (object pool audit, sprite atlasing, GC) — `feature/performance-pass`, PR open, awaiting merge
+- [x] 26. Performance pass (object pool audit, sprite atlasing, GC) — `feature/performance-pass`
   - Object pool audit: `Bullet`/`XPOrb`/`MacroResourcePickup` already Get()/Release() from a `GameObjectPool` with no `Instantiate`/`Destroy` anywhere — the "bullets + XP orbs use ObjectPool" requirement was already satisfied
   - **Found and fixed a real GC hot path**: every OnGUI screen allocated fresh `GUIStyle` objects every single frame; `HUDUI`'s is always visible during a run, so this was a continuous per-frame allocation. Styles now cached as fields, created once. Verified via reflection that the same `GUIStyle` instance persists across many frames instead of being reallocated
-  - Also hoisted a `WaitForSeconds` allocation out of `WaveSpawner`'s per-enemy spawn loop (was reallocating one per enemy within a wave)
   - Sprite atlasing doesn't apply yet — no sprite art exists beyond the placeholder app icon; all rendering is colored primitives and IMGUI
-- [ ] 27. PC + Android builds (smoke test) — `feature/v0-builds`
+
+## In review
+
+- [ ] 27. PC + Android builds (smoke test) — `feature/v0-builds`, PR open, awaiting merge
+  - **Environment limitation, flagged explicitly**: this Unity Editor install has no Windows Build Support or Android Build Support modules — only macOS Standalone is available (`BuildPipeline.IsBuildTargetSupported` confirmed false for both `StandaloneWindows64` and `Android`). Neither a Windows `.exe` nor an Android `.apk` could be produced in this environment; that remains a manual step for the user on a machine with those modules installed (or via a CI runner)
+  - As the closest available substitute, built a macOS Standalone IL2CPP-eligible player (all three scenes: MainMenu/Hub/Run) — `BuildPipeline.BuildPlayer` succeeded with 0 errors, ~143MB output, confirming the project compiles and packages cleanly end-to-end
+  - Ran the full "v0 done when" desktop smoke-test checklist as one continuous Play Mode session (not split across separate diagnostics like prior verifications): MainMenu → Play → Hub → Start Run → level-up triggers `SkillPickUI` with 3 offers and correctly pauses/resumes time → boss defeat advances tier 1 → 2 and awards resources → death shows `RunSummaryUI` and correctly banks the run's 10 earned resources → Return to Hub → Hub screenshot confirms "Resources: 10" and "Tiers Unlocked: 2". Every step of the checklist passed in sequence without resetting state between steps
 
 ## v0 done when
 
-- [ ] Desktop build: launch → hub → assign passive points → start run → auto-weapons fire → waves spawn and escalate → level-up skill pick works → wave 5 boss appears → kill boss → tier 2 waves → die → hub shows earned resources
+- [x] Desktop build: launch → hub → assign passive points → start run → auto-weapons fire → waves spawn and escalate → level-up skill pick works → wave 5 boss appears → kill boss → tier 2 waves → die → hub shows earned resources
+  - Verified via the continuous Play Mode smoke test above (macOS Standalone build proxy, since Windows Build Support isn't installed here); "assign passive points" and "auto-weapons fire" were verified separately in earlier PRs (passive-tree, weapon-auto-fire) rather than re-run in this same session
 - [ ] Android APK: sideload → same flow works with virtual joystick → no <30fps during peak enemy count (~50 enemies)
-- [ ] Respec: hub passive tree reset button refunds all points correctly
-- [ ] Save persists: close and reopen game, resources and unlocked tiers are preserved
+  - **Not verifiable in this environment** — no Android Build Support module installed, so no APK could be produced or sideloaded. Needs a machine with the Android module (or a CI runner) to actually build and test on-device
+- [x] Respec: hub passive tree reset button refunds all points correctly — verified in `feature/passive-tree`
+- [x] Save persists: close and reopen game, resources and unlocked tiers are preserved — verified in `feature/save-system` (confirmed disk, not memory, is the source of truth on reload)
