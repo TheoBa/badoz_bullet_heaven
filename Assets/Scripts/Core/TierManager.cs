@@ -11,7 +11,6 @@ namespace BulletHeaven.Core
         [SerializeField] private TierConfig config;
 
         public event Action OnTierAdvanced;
-        public event Action OnRunCleared;
 
         private int _tierIndex;
 
@@ -43,7 +42,6 @@ namespace BulletHeaven.Core
 
             if (IsLastTier)
             {
-                OnRunCleared?.Invoke();
                 GameManager.Instance?.EndRun(RunResult.FullClear);
             }
             else
